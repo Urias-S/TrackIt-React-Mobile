@@ -1,0 +1,190 @@
+import GlobalStyle from "../styles/GlobalStyle";
+import styled from "styled-components";
+import { Link } from "react-router";
+import { FaRegCalendarAlt, FaRegCalendarCheck, FaCheck } from "react-icons/fa";
+export default function Hoje() {
+  return (
+    <>
+      <GlobalStyle />
+      <Header>
+        <h1>TrackIt</h1>
+        <UserImg src='https://static.vecteezy.com/system/resources/thumbnails/003/337/584/small/default-avatar-photo-placeholder-profile-icon-vector.jpg' />
+      </Header>
+      <Content>
+        <Title>
+          Segunda, 17/05
+        </Title>
+        <Habitos>
+          <Habito>
+            <Esquerda>
+              <h1>Ler 1 capítulo de livro</h1>
+              <p>Sequência atual: 3 dias</p>
+              <p>Seu recorde: 5 dias</p>
+            </Esquerda>
+            <Direita>
+              <div>
+                <FaCheck />
+              </div>
+            </Direita>
+          </Habito>
+
+          <Habito>
+            <Esquerda>
+              <h1>Ler 1 capítulo de livro</h1>
+              <p>Sequência atual: 3 dias</p>
+              <p>Seu recorde: 5 dias</p>
+            </Esquerda>
+            <Direita>
+              <div>
+                <FaCheck />
+              </div>
+            </Direita>
+          </Habito>
+
+          <Habito>
+            <Esquerda>
+              <h1>Ler 1 capítulo de livro</h1>
+              <p>Sequência atual: 3 dias</p>
+              <p>Seu recorde: 5 dias</p>
+            </Esquerda>
+            <Direita>
+              <div>
+                <FaCheck />
+              </div>
+            </Direita>
+          </Habito>
+
+
+        </Habitos>
+      </Content>
+      <Bottom>
+        <Lista to = {'/habitos'}>
+          <FaRegCalendarAlt />
+          <p>Hábitos</p>
+        </Lista>
+        <Dia to={'/hoje'}>
+          <FaRegCalendarCheck />
+          <p>Hoje</p>
+        </Dia>
+      </Bottom>
+    </>
+  );
+}
+const Esquerda = styled.div`
+  h1 {
+    font-family: "Lexend Deca", sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: rgba(102, 102, 102, 1);
+    margin-bottom: 10px;
+  }
+  p {
+    font-family: "Lexend Deca", sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(102, 102, 102, 1);
+    margin-bottom: 5px;
+  }
+`;
+const Direita = styled.div`
+  width: 70px;
+  height: 70px;
+  background-color: rgba(235, 235, 235, 1);
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 35px;
+  color: white;
+  }
+`;
+
+const Habito = styled.div`
+  background-color: white;
+  width: 100%;
+  border-radius: 5px;
+  padding: 13px;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+
+`;
+const Habitos = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`;
+const Title = styled.div`
+    font-family: "Lexend Deca", sans-serif;
+    color: rgba(18, 107, 165, 1);
+    font-weight: 400;
+    font-size: 25px;
+`;
+const Dia = styled(Link)`
+  width: 50%;
+  height: 100%;
+  border: none;
+  background-color: rgba(82, 182, 255, 1);
+  color: white;
+  font-size: 18px;
+  display: flex;
+  font-family: "Lexend Deca", sans-serif;
+  text-decoration: none;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+`;
+const Lista = styled(Link)`
+  width: 50%;
+  height: 100%;
+  border: none;
+  color: rgba(212, 212, 212, 1);
+  background-color: white;
+  font-size: 18px;
+  font-family: "Lexend Deca", sans-serif;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+`;
+const Bottom = styled.div`
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: 65px;
+  display: flex;
+`;
+const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 25px 15px 25px 15px;
+  background-color: rgba(242, 242, 242, 1);
+  height: calc(100vh -  145px);
+`;
+const Header = styled.header`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(18, 107, 165, 1);
+  width: 100vw;
+  height: 80px;
+  padding: 10px 20px;
+  h1 {
+    font-family: "Playball", cursive;
+    font-weight: 400;
+    color: white;
+    font-size: 45px;
+  }
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.15);
+`
+const UserImg = styled.img`
+  height: 55px;
+  width: 55px;
+  border-radius: 100%;
+`

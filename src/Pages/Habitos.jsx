@@ -44,7 +44,7 @@ export default function Habitos() {
           <FaRegCalendarAlt />
           <p>Hábitos</p>
         </Lista>
-        <Dia>
+        <Dia to={'/hoje'}>
           <FaRegCalendarCheck />
           <p>Hoje</p>
         </Dia>
@@ -134,13 +134,15 @@ const Lista = styled.button`
   justify-content: center;
   gap: 5px;
 `;
-const Dia = styled.button`
+const Dia = styled(Link)`
   width: 50%;
   height: 100%;
   border: none;
   color: rgba(212, 212, 212, 1);
   background-color: white;
   font-size: 18px;
+  font-family: "Lexend Deca", sans-serif;
+  text-decoration: none;
   display: flex;
   align-items: center;
   justify-content: center;
