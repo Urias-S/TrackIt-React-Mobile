@@ -74,7 +74,14 @@ export default function Habitos() {
         setAddHabito(false);
         buscarHabitos();
       })
-      .catch();
+      .catch((err) => {
+        setCarregando(false);
+        if (err.response.status === 422) {
+          alert('Campo "nome do hábito" deve ser preenchido');
+        } else {
+          alert('Ocorreu um erro, tente novamente mais tarde');
+        }
+      });
 
   }
   function toggleDia(index) {
