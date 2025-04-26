@@ -7,16 +7,17 @@ import UserContext from './contexts/UserContext.js'
 import { useEffect } from 'react'
 
 function App() {
-  const localToken = localStorage.getItem("token");
+  const userData = localStorage.getItem("userData");
+  const user = JSON.parse(userData);
   const navigate = useNavigate();
   useEffect(() => {
-    if (!localToken) {
+    if (!user.token) {
       navigate('/');
     } 
   }, [])
 
   return (
-      <UserContext.Provider value={localToken}>
+      <UserContext.Provider value={user}>
       <Routes>
         <Route path='/' element={<Login />} />
         <Route path='/cadastro' element={<Cadastro />} />

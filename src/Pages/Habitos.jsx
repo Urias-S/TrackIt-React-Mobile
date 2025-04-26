@@ -9,11 +9,11 @@ export default function Habitos() {
   const diasSemana = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
   const [habitos, setHabitos] = useState([]);
   const [addHabito, setAddHabito] = useState(false);
-  const localToken = useContext(UserContext);
+  const token = useContext(UserContext).token;
   useEffect(() => {
     const config = {
       headers: {
-        "Authorization": `Bearer ${localToken}`
+        "Authorization": `Bearer ${token}`
       }
     }
     axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", config)

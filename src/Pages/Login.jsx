@@ -52,7 +52,7 @@ export default function Login() {
     axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login', corpo)
       .then((res) => {
         setCarregando(false);
-        localStorage.setItem('token', res.data.token);
+        localStorage.setItem('userData', JSON.stringify(res.data));
         navigate('/hoje');
       })
       .catch((err) => {
