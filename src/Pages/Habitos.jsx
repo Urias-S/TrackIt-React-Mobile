@@ -371,4 +371,5 @@ const UserImg = styled.img`
   height: 55px;
   width: 55px;
   border-radius: 100%;
+  object-fit: cover;
 `
