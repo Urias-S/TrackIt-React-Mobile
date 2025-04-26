@@ -11,6 +11,7 @@ const GlobalStyle = createGlobalStyle`
       display: flex;
       flex-direction: column;
       align-items: center;
+      background-color: rgba(242, 242, 242, 1);
     }
   }
 `;

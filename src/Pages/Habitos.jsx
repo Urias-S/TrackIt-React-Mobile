@@ -2,13 +2,14 @@ import GlobalStyle from "../styles/GlobalStyle";
 import styled from "styled-components";
 import { FaRegCalendarAlt, FaRegCalendarCheck } from "react-icons/fa";
 import { Link } from "react-router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import UserContext from "../contexts/UserContext";
 import axios from "axios";
 export default function Habitos() {
   const diasSemana = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
   const [habitos, setHabitos] = useState([]);
   const [addHabito, setAddHabito] = useState(false);
-  const localToken = localStorage.getItem("token");
+  const localToken = useContext(UserContext);
   useEffect(() => {
     const config = {
       headers: {
@@ -183,7 +184,6 @@ const AdicionarHabito = styled.div`
   padding: 20px;
   background-color: white;
   border-radius: 5px;
-  margin-top: 15px;
 `;
 const Lista = styled.button`
   width: 50%;
@@ -261,7 +261,10 @@ const Content = styled.div`
   flex-direction: column;
   padding: 25px 15px 25px 15px;
   background-color: rgba(242, 242, 242, 1);
-  height: calc(100vh -  145px);
+  height: 100%;
+  width: 100vw;
+  margin-top: 90px;
+  margin-bottom: 40px;
 `;
 const Header = styled.header`
   display: flex;
@@ -271,6 +274,9 @@ const Header = styled.header`
   width: 100vw;
   height: 80px;
   padding: 10px 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
   h1 {
     font-family: "Playball", cursive;
     font-weight: 400;

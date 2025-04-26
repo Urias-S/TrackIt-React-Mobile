@@ -12,10 +12,11 @@ function App() {
   useEffect(() => {
     if (!localToken) {
       navigate('/');
-    }
+    } 
   }, [])
 
   return (
+      <UserContext.Provider value={localToken}>
       <Routes>
         <Route path='/' element={<Login />} />
         <Route path='/cadastro' element={<Cadastro />} />
@@ -23,6 +24,7 @@ function App() {
         <Route path='/habitos' element={<Habitos />} />
         <Route path='/hoje' element={<Hoje />} />
       </Routes>
+      </UserContext.Provider>
   )
 }
 
