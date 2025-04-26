@@ -5,18 +5,39 @@ import { Link, useNavigate } from "react-router";
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../contexts/UserContext";
 import axios from "axios";
+import { Comment } from "react-loader-spinner";
+
 export default function Habitos() {
   const diasSemana = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
   const [habitos, setHabitos] = useState([]);
   const [addHabito, setAddHabito] = useState(false);
   const user = useContext(UserContext);
   const navigate = useNavigate();
+
+  const [nomeHabitoNovo, setNomeHabitoNovo] = useState('');
+  const [diasSelecionados, setDiasSelecionados] = useState([]);
+  const [carregando, setCarregando] = useState(false);
   if (!user) return;
   useEffect(() => {
-    if (!user){
+    if (!user) {
       navigate('/');
     }
   }, []);
+  function buscarHabitos() {
+    const config = {
+      headers: {
+        "Authorization": `Bearer ${user.token}`
+      }
+    }
+    axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", config)
+      .then((res) => {
+        setHabitos(res.data);
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+      });
+
+  }
   useEffect(() => {
     const config = {
       headers: {
@@ -32,35 +53,71 @@ export default function Habitos() {
       });
 
   }, []);
+  function enviarHabitoNovo(e) {
+    e.preventDefault();
+    setCarregando(true);
+
+    const corpo = {
+      name: nomeHabitoNovo,
+      days: diasSelecionados
+    }
+    const config = {
+      headers: {
+        "Authorization": `Bearer ${user.token}`
+      }
+    }
+    axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", corpo, config)
+      .then(() => {
+        setCarregando(false);
+        setNomeHabitoNovo('');
+        setDiasSelecionados([]);
+        setAddHabito(false);
+        buscarHabitos();
+      })
+      .catch();
+
+  }
+  function toggleDia(index) {
+    if (diasSelecionados.includes(index)) {
+      setDiasSelecionados(diasSelecionados.filter(dia => dia !== index))
+    } else {
+      setDiasSelecionados([...diasSelecionados, index])
+    }
+  }
   return (
     <>
       <GlobalStyle />
       <Header>
         <h1>TrackIt</h1>
-        <UserImg src= {user.image}/>
+        <UserImg src={user.image} />
       </Header>
       <Content>
         <Title>
           <h1>Meus hábitos</h1>
           <AddHabito onClick={() => setAddHabito(true)}>+</AddHabito>
         </Title>
-        {addHabito ? <><AdicionarHabito>
+        {addHabito ? <><AdicionarHabito onSubmit={enviarHabitoNovo}>
           <Nome>
-            <input type="text" placeholder="nome do hábito" />
+            <input
+              value={nomeHabitoNovo}
+              type="text"
+              placeholder="nome do hábito"
+              onChange={(e) => setNomeHabitoNovo(e.target.value)}
+              disabled={carregando} />
           </Nome>
           <Semana>
             {diasSemana.map((dia, index) => {
               return (
                 <Checkbox key={index}>
-                  <CheckboxInvisivel type='checkbox' id={index}></CheckboxInvisivel>
+                  <CheckboxInvisivel type='checkbox' disabled={carregando} id={index} onChange={() => toggleDia(index)} checked={diasSelecionados.includes(index)}></CheckboxInvisivel>
                   <CheckLabel htmlFor={index}>{dia}</CheckLabel>
                 </Checkbox>
               );
             })}
           </Semana>
           <Acoes>
-            <Cancelar onClick={() => setAddHabito(false)}>Cancelar</Cancelar>
-            <Salvar>Salvar</Salvar>
+            <Cancelar onClick={() => setAddHabito(false)} disabled={carregando}>Cancelar</Cancelar>
+            <Salvar type="submit" disabled={carregando} $carregando={carregando}>{carregando ? <Comment backgroundColor="transparent" height="60px" width="60px" /> : 'Salvar'}</Salvar>
           </Acoes>
         </AdicionarHabito></> : <></>}
         <ListaHabitos>
@@ -97,6 +154,7 @@ export default function Habitos() {
     </>
   );
 }
+
 const NomeHabito = styled.h1`
   font-family: 'Lexend Deca', sans-serif;
   font-weight: 400;
@@ -131,13 +189,18 @@ const Cancelar = styled.button`
   font-size: 16px;
 `;
 const Salvar = styled.button`
-  background-color: rgba(82, 182, 255, 1);
+  background-color: ${props => props.$carregando ? "rgba(82, 182, 255, 0.7)" : " rgba(82, 182, 255, 1)"};
   color: white;
   border: none;
   border-radius: 5px;
+  width: 90px;
+  height: 36px;
   padding: 8px 20px;
   font-weight: 400;
   font-size: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 const Acoes = styled.div`
   display: flex;
@@ -150,6 +213,10 @@ const Checkbox = styled.div`
 `;
 const CheckboxInvisivel = styled.input`
   display: none;
+  &:checked + label {
+    background-color: rgba(212, 212, 212, 1);
+    color: white;
+  }
 `;
 const CheckLabel = styled.label`
   display: flex;
@@ -162,6 +229,7 @@ const CheckLabel = styled.label`
   font-size: 20px;
   color: rgba(212, 212, 212, 1);
   font-family: 'Lexend Deca', sans-serif;
+
 `;
 const Semana = styled.div`
   width: 100%;
@@ -187,7 +255,7 @@ const Nome = styled.div`
     }
   }
 `;
-const AdicionarHabito = styled.div`
+const AdicionarHabito = styled.form`
   padding: 20px;
   background-color: white;
   border-radius: 5px;
