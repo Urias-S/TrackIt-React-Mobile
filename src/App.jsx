@@ -11,7 +11,7 @@ function App() {
   const user = JSON.parse(userData);
   const navigate = useNavigate();
   useEffect(() => {
-    if (!user.token) {
+    if (!userData) {
       navigate('/');
     } 
   }, [])

@@ -1,7 +1,7 @@
 import GlobalStyle from "../styles/GlobalStyle";
 import styled from "styled-components";
 import { FaRegCalendarAlt, FaRegCalendarCheck } from "react-icons/fa";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../contexts/UserContext";
 import axios from "axios";
@@ -9,11 +9,18 @@ export default function Habitos() {
   const diasSemana = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
   const [habitos, setHabitos] = useState([]);
   const [addHabito, setAddHabito] = useState(false);
-  const token = useContext(UserContext).token;
+  const user = useContext(UserContext);
+  const navigate = useNavigate();
+  if (!user) return;
+  useEffect(() => {
+    if (!user){
+      navigate('/');
+    }
+  }, []);
   useEffect(() => {
     const config = {
       headers: {
-        "Authorization": `Bearer ${token}`
+        "Authorization": `Bearer ${user.token}`
       }
     }
     axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", config)
@@ -30,7 +37,7 @@ export default function Habitos() {
       <GlobalStyle />
       <Header>
         <h1>TrackIt</h1>
-        <UserImg src='https://static.vecteezy.com/system/resources/thumbnails/003/337/584/small/default-avatar-photo-placeholder-profile-icon-vector.jpg' />
+        <UserImg src= {user.image}/>
       </Header>
       <Content>
         <Title>
