@@ -2,16 +2,27 @@ import Login from './Pages/Login.jsx'
 import Cadastro from './Pages/Cadastro.jsx'
 import Habitos from './Pages/Habitos.jsx'
 import Hoje from './Pages/Hoje.jsx'
-import { Route, Routes } from 'react-router'
+import { Route, Routes, useNavigate } from 'react-router'
+import UserContext from './contexts/UserContext.js'
+import { useEffect } from 'react'
+
 function App() {
+  const localToken = localStorage.getItem("token");
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!localToken) {
+      navigate('/');
+    }
+  }, [])
 
   return (
-    <Routes>
-      <Route path='/' element={<Login />}/>
-      <Route path='/cadastro' element={<Cadastro />}/>
-      <Route path='/habitos' element={<Habitos />}/>
-      <Route path='/hoje' element = {<Hoje />}/>
-    </Routes>
+      <Routes>
+        <Route path='/' element={<Login />} />
+        <Route path='/cadastro' element={<Cadastro />} />
+
+        <Route path='/habitos' element={<Habitos />} />
+        <Route path='/hoje' element={<Hoje />} />
+      </Routes>
   )
 }
 

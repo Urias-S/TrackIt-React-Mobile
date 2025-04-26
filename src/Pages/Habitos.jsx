@@ -2,8 +2,28 @@ import GlobalStyle from "../styles/GlobalStyle";
 import styled from "styled-components";
 import { FaRegCalendarAlt, FaRegCalendarCheck } from "react-icons/fa";
 import { Link } from "react-router";
+import { useEffect, useState } from "react";
+import axios from "axios";
 export default function Habitos() {
   const diasSemana = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
+  const [habitos, setHabitos] = useState([]);
+  const [addHabito, setAddHabito] = useState(false);
+  const localToken = localStorage.getItem("token");
+  useEffect(() => {
+    const config = {
+      headers: {
+        "Authorization": `Bearer ${localToken}`
+      }
+    }
+    axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", config)
+      .then((res) => {
+        setHabitos(res.data);
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+      });
+
+  }, []);
   return (
     <>
       <GlobalStyle />
@@ -14,29 +34,46 @@ export default function Habitos() {
       <Content>
         <Title>
           <h1>Meus hábitos</h1>
-          <AddHabito>+</AddHabito>
+          <AddHabito onClick={() => setAddHabito(true)}>+</AddHabito>
         </Title>
-        <AdicionarHabito>
+        {addHabito ? <><AdicionarHabito>
           <Nome>
             <input type="text" placeholder="nome do hábito" />
           </Nome>
           <Semana>
             {diasSemana.map((dia, index) => {
               return (
-                <Checkbox key = {index}>
-                <CheckboxInvisivel type = 'checkbox' id = {index}></CheckboxInvisivel>
-                <CheckLabel htmlFor = {index}>{dia}</CheckLabel>
-              </Checkbox>
+                <Checkbox key={index}>
+                  <CheckboxInvisivel type='checkbox' id={index}></CheckboxInvisivel>
+                  <CheckLabel htmlFor={index}>{dia}</CheckLabel>
+                </Checkbox>
               );
             })}
           </Semana>
           <Acoes>
-            <Cancelar>Cancelar</Cancelar>
+            <Cancelar onClick={() => setAddHabito(false)}>Cancelar</Cancelar>
             <Salvar>Salvar</Salvar>
           </Acoes>
-        </AdicionarHabito>
+        </AdicionarHabito></> : <></>}
         <ListaHabitos>
-          <p>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>
+          {habitos && habitos.length > 0 ? habitos.map((habito, index) => {
+            const diasHabito = habito.days
+            return (
+              <div key={index}>
+                <NomeHabito>{habito.name}</NomeHabito>
+                <DiasHabito>{diasSemana.map((dia, index) => {
+                  for (let i = 0; i < diasHabito.length; i++) {
+                    if (index === diasHabito[i]) {
+                      return (
+                        <DiaSemana $selecionado={true} key={index}>{dia}</DiaSemana>
+                      );
+                    }
+                  }
+                  return <DiaSemana $selecionado={false} key={index}>{dia}</DiaSemana>
+                })}</DiasHabito>
+              </div>
+            );
+          }) : <p>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>}
         </ListaHabitos>
       </Content>
       <Bottom>
@@ -52,6 +89,32 @@ export default function Habitos() {
     </>
   );
 }
+const NomeHabito = styled.h1`
+  font-family: 'Lexend Deca', sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  color: rgba(102, 102, 102, 1);
+`;
+const DiaSemana = styled.div`
+  width: 30px;
+  height: 30px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Lexend Deca', sans-serif;
+  font-size: 20px;
+  border: 1px solid rgba(212, 212, 212, 1);
+  color: ${props => props.$selecionado ? "white" : "rgba(212, 212, 212, 1)"};
+  background-color: ${props => props.$selecionado ? "rgba(212, 212, 212, 1)" : "transparent"};
+  margin-bottom: 30px;
+`;
+const DiasHabito = styled.div`
+  width: 100%;
+  display: flex;
+  gap: 5px;
+  margin-top: 10px;
+`;
 const Cancelar = styled.button`
   color: rgba(82, 182, 255, 1);
   background-color: transparent;
@@ -164,6 +227,9 @@ const ListaHabitos = styled.div`
     font-weight: 400;
     margin-top: 30px;
   }
+  div {
+    margin-bottom: 30px;
+  }
 `;
 const AddHabito = styled.button`
   background-color: rgba(82, 182, 255, 1);
@@ -182,6 +248,7 @@ const Title = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 40px;
   h1 {
     font-family: "Lexend Deca", sans-serif;
     color: rgba(18, 107, 165, 1);

@@ -75,6 +75,7 @@ export default function Cadastro() {
       image: foto,
       password: senha
     }
+    console.log(registro);
     axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up', registro)
 
       .then(() => {
