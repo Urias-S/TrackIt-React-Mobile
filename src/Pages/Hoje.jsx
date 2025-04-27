@@ -16,64 +16,52 @@ export default function Hoje() {
       }
     }
     axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today", config)
-    .then((res) => {
-      setHabitosHoje(res.data);
-    })
-    .catch(err => alert('Ocorreu um erro, tente novamente mais tarded'));
+      .then((res) => {
+        setHabitosHoje(res.data);
+      })
+      .catch(err => alert('Ocorreu um erro, tente novamente mais tarded'));
   }, []);
+
+  function defineDataHoje() {
+    const hoje = new Date();
+    const diasDaSemana = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+
+    const diaDaSemana = diasDaSemana[hoje.getDay()];
+    const dia = String(hoje.getDate()).padStart(2, '0');
+    const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+
+    const dataFormatada = `${diaDaSemana}, ${dia}/${mes}`
+    return dataFormatada;
+  }
 
   return (
     <>
       <GlobalStyle />
       <Header>
         <h1>TrackIt</h1>
-        <UserImg src = {user.image} />
+        <UserImg src={user.image} />
       </Header>
       <Content>
         <Title>
-          Segunda, 17/05
+          {defineDataHoje()}
         </Title>
         <Habitos>
-          <Habito>
-            <Esquerda>
-              <h1>Ler 1 capítulo de livro</h1>
-              <p>Sequência atual: 3 dias</p>
-              <p>Seu recorde: 5 dias</p>
-            </Esquerda>
-            <Direita>
-              <div>
-                <FaCheck />
-              </div>
-            </Direita>
-          </Habito>
-
-          <Habito>
-            <Esquerda>
-              <h1>Ler 1 capítulo de livro</h1>
-              <p>Sequência atual: 3 dias</p>
-              <p>Seu recorde: 5 dias</p>
-            </Esquerda>
-            <Direita>
-              <div>
-                <FaCheck />
-              </div>
-            </Direita>
-          </Habito>
-
-          <Habito>
-            <Esquerda>
-              <h1>Ler 1 capítulo de livro</h1>
-              <p>Sequência atual: 3 dias</p>
-              <p>Seu recorde: 5 dias</p>
-            </Esquerda>
-            <Direita>
-              <div>
-                <FaCheck />
-              </div>
-            </Direita>
-          </Habito>
-
-
+          {habitosHoje.map((habito, index) => {
+            return (
+              <Habito key={index}>
+                <Esquerda>
+                  <h1>{habito.name}</h1>
+                  <p>{`Sequência atual: ${habito.currentSequence} dias`}</p>
+                  <p>{`Seu recorde: ${habito.highestSequence} dias`}</p>
+                </Esquerda>
+                <Direita $feito = {habito.done}>
+                  <CheckContainer>
+                    <FaCheck />
+                  </CheckContainer>
+                </Direita>
+              </Habito>
+            );
+          })}
         </Habitos>
       </Content>
       <Bottom>
@@ -108,18 +96,18 @@ const Esquerda = styled.div`
 const Direita = styled.div`
   width: 70px;
   height: 70px;
-  background-color: rgba(235, 235, 235, 1);
+  background-color: ${props => props.$feito ? "rgba(143, 197, 73, 1)" : "rgba(235, 235, 235, 1)"};
   border-radius: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
-  div {
+`;
+const CheckContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 35px;
   color: white;
-  }
 `;
 
 const Habito = styled.div`
