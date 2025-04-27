@@ -10,7 +10,14 @@ export default function Hoje() {
   const user = useContext(UserContext);
   const [habitosHoje, setHabitosHoje] = useState([]);
   const navigate = useNavigate();
+  if (!user) return;
   useEffect(() => {buscaHabitos()}, []);
+  useEffect(() => {
+    if (!localStorage.getItem('userData') || JSON.parse(localStorage.getItem('userData')).token !== user.token) {
+      navigate('/');
+      return;
+    }
+  }, []);
   function buscaHabitos() {
     const config = {
       headers: {
@@ -97,11 +104,11 @@ export default function Hoje() {
         </Habitos>
       </Content>
       <Bottom>
-        <Lista to={'/habitos'}>
+        <Lista to={!localStorage.getItem('userData') || JSON.parse(localStorage.getItem('userData')).token !== user.token ? '/' : '/habitos'}>
           <FaRegCalendarAlt />
           <p>Hábitos</p>
         </Lista>
-        <Dia to={'/hoje'}>
+        <Dia to={!localStorage.getItem('userData') || JSON.parse(localStorage.getItem('userData')).token !== user.token ? '/' : '/hoje'}>
           <FaRegCalendarCheck />
           <p>Hoje</p>
         </Dia>

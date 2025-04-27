@@ -19,8 +19,9 @@ export default function Habitos() {
   const [carregando, setCarregando] = useState(false);
   if (!user) return;
   useEffect(() => {
-    if (!user) {
+    if (!localStorage.getItem('userData') || JSON.parse(localStorage.getItem('userData')).token !== user.token) {
       navigate('/');
+      return;
     }
   }, []);
   function buscarHabitos() {
@@ -149,11 +150,11 @@ export default function Habitos() {
         </ListaHabitos>
       </Content>
       <Bottom>
-        <Lista>
+        <Lista to={!localStorage.getItem('userData') || JSON.parse(localStorage.getItem('userData')).token !== user.token ? '/' : '/habitos'}>
           <FaRegCalendarAlt />
           <p>Hábitos</p>
         </Lista>
-        <Dia to={'/hoje'}>
+        <Dia to={!localStorage.getItem('userData') || JSON.parse(localStorage.getItem('userData')).token !== user.token ? '/' : '/hoje'}>
           <FaRegCalendarCheck />
           <p>Hoje</p>
         </Dia>
