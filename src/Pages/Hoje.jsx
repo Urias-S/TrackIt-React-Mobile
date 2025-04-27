@@ -9,7 +9,8 @@ import UserContext from "../contexts/UserContext";
 export default function Hoje() {
   const user = useContext(UserContext);
   const [habitosHoje, setHabitosHoje] = useState([]);
-  useEffect(() => {
+  useEffect(() => {buscaHabitos()}, []);
+  function buscaHabitos() {
     const config = {
       headers: {
         "Authorization": `Bearer ${user.token}`
@@ -19,9 +20,8 @@ export default function Hoje() {
       .then((res) => {
         setHabitosHoje(res.data);
       })
-      .catch(err => alert('Ocorreu um erro, tente novamente mais tarded'));
-  }, []);
-
+      .catch(err => alert('Ocorreu um erro, tente novamente mais tarde'));
+  }
   function defineDataHoje() {
     const hoje = new Date();
     const diasDaSemana = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
@@ -33,7 +33,30 @@ export default function Hoje() {
     const dataFormatada = `${diaDaSemana}, ${dia}/${mes}`
     return dataFormatada;
   }
-
+  function fazHabito(habitoId) {
+    const config = {
+      headers: {
+        "Authorization": `Bearer ${user.token}`
+      }
+    }
+    axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habitoId}/check`, {}, config)
+    .then(() => {
+      buscaHabitos();
+    })
+    .catch(() => alert('Ocorreu um erro, tente novamente mais tarde'));
+  }
+  function desfazHabito (habitoId){
+    const config = {
+      headers: {
+        "Authorization": `Bearer ${user.token}`
+      }
+    }
+    axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habitoId}/uncheck`, {}, config)
+    .then(() => {
+      buscaHabitos();
+    })
+    .catch(() => alert('Ocorreu um erro, tente novamente mais tarde'));
+  }
   return (
     <>
       <GlobalStyle />
@@ -54,7 +77,7 @@ export default function Hoje() {
                   <p>{`Sequência atual: ${habito.currentSequence} dias`}</p>
                   <p>{`Seu recorde: ${habito.highestSequence} dias`}</p>
                 </Esquerda>
-                <Direita $feito = {habito.done}>
+                <Direita $feito={habito.done} onClick={habito.done ? () => desfazHabito(habito.id)  : () => fazHabito(habito.id)}>
                   <CheckContainer>
                     <FaCheck />
                   </CheckContainer>
