@@ -195,7 +195,10 @@ const Content = styled.div`
   flex-direction: column;
   padding: 25px 15px 25px 15px;
   background-color: rgba(242, 242, 242, 1);
-  height: calc(100vh -  145px);
+  height: 100%;
+  width: 100vw;
+  margin-top: 90px;
+  margin-bottom: 40px;
 `;
 const Header = styled.header`
   display: flex;
@@ -205,6 +208,9 @@ const Header = styled.header`
   width: 100vw;
   height: 80px;
   padding: 10px 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
   h1 {
     font-family: "Playball", cursive;
     font-weight: 400;
