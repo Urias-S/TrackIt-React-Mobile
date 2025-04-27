@@ -2,7 +2,26 @@ import GlobalStyle from "../styles/GlobalStyle";
 import styled from "styled-components";
 import { Link } from "react-router";
 import { FaRegCalendarAlt, FaRegCalendarCheck, FaCheck } from "react-icons/fa";
+import { useContext, useEffect, useState } from "react";
+import axios from "axios";
+import UserContext from "../contexts/UserContext";
+
 export default function Hoje() {
+  const user = useContext(UserContext);
+  const [habitosHoje, setHabitosHoje] = useState([]);
+  useEffect(() => {
+    const config = {
+      headers: {
+        "Authorization": `Bearer ${user.token}`
+      }
+    }
+    axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today", config)
+    .then((res) => {
+      setHabitosHoje(res.data);
+    })
+    .catch(err => alert('Ocorreu um erro, tente novamente mais tarded'));
+  }, []);
+
   return (
     <>
       <GlobalStyle />
@@ -58,7 +77,7 @@ export default function Hoje() {
         </Habitos>
       </Content>
       <Bottom>
-        <Lista to = {'/habitos'}>
+        <Lista to={'/habitos'}>
           <FaRegCalendarAlt />
           <p>Hábitos</p>
         </Lista>
