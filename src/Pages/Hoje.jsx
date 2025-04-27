@@ -27,7 +27,7 @@ export default function Hoje() {
       <GlobalStyle />
       <Header>
         <h1>TrackIt</h1>
-        <UserImg src='https://static.vecteezy.com/system/resources/thumbnails/003/337/584/small/default-avatar-photo-placeholder-profile-icon-vector.jpg' />
+        <UserImg src = {user.image} />
       </Header>
       <Content>
         <Title>
@@ -206,4 +206,5 @@ const UserImg = styled.img`
   height: 55px;
   width: 55px;
   border-radius: 100%;
+  object-fit: cover;
 `
