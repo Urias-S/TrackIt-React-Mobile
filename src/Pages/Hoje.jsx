@@ -1,6 +1,6 @@
 import GlobalStyle from "../styles/GlobalStyle";
 import styled from "styled-components";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { FaRegCalendarAlt, FaRegCalendarCheck, FaCheck } from "react-icons/fa";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
@@ -9,6 +9,7 @@ import UserContext from "../contexts/UserContext";
 export default function Hoje() {
   const user = useContext(UserContext);
   const [habitosHoje, setHabitosHoje] = useState([]);
+  const navigate = useNavigate();
   useEffect(() => {buscaHabitos()}, []);
   function buscaHabitos() {
     const config = {
@@ -34,6 +35,10 @@ export default function Hoje() {
     return dataFormatada;
   }
   function fazHabito(habitoId) {
+    if (!localStorage.getItem('userData') || JSON.parse(localStorage.getItem('userData')).token !== user.token) {
+      navigate('/');
+      return;
+    }
     const config = {
       headers: {
         "Authorization": `Bearer ${user.token}`
@@ -46,6 +51,10 @@ export default function Hoje() {
     .catch(() => alert('Ocorreu um erro, tente novamente mais tarde'));
   }
   function desfazHabito (habitoId){
+    if (!localStorage.getItem('userData') || JSON.parse(localStorage.getItem('userData')).token !== user.token) {
+      navigate('/');
+      return;
+    }
     const config = {
       headers: {
         "Authorization": `Bearer ${user.token}`
