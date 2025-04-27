@@ -49,7 +49,7 @@ export default function Habitos() {
         setHabitos(res.data);
       })
       .catch((err) => {
-        console.log(err.response.data);
+        alert('Ocorreu um erro, tente novamente mais tarde');
       });
 
   }, []);
